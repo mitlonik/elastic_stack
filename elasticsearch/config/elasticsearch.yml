@@ -1,0 +1,12 @@
+# Path to directory where to store the data (separate multiple locations by comma):
+# path.data: /var/lib/elasticsearch
+# # Path to log files:
+# path.logs: /var/log/elasticsearch
+
+node.name: es01
+cluster.name: "docker-cluster"
+cluster.initial_master_nodes: es01
+bootstrap.memory_lock: true
+
+network.host: 0.0.0.0 # localhost - only for host based, not in container
+xpack.license.self_generated.type: trial

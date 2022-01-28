@@ -1,0 +1,47 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      labels.dedot: true
+      hints.enabled: true
+      templates:
+        - condition:
+            contains:
+              container.labels.collect_logs_with_filebeat: "true"      # label name in service docker-compose file
+              docker.container.name: "test_golang_app_2"
+          config:
+            - type: container
+              format: docker # auto, docker, cli
+              # stream: stdout # all, stdout, stderr
+              #containers.ids:
+              #  - "${data.docker.container.id}"
+              paths:
+                - "/var/lib/docker/containers/${data.docker.containers.id}/*.log"
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.kibana:
+  host: "kibana:5601"
+
+output.elasticsearch:
+  enabled: false
+  hosts: ["elasticsearch:9200"]
+
+output.logstash:
+  enabled: true
+  hosts: ["logstash:5044"]
+
+processors:
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "agent.hostname", "agent.id", "agent.name", "agent.version", "docker.container.labels.com_docker_compose_version", "ecs.version", "host.name", "input.type", "kubernetes.container.image", "log.offset", "docker.container.labels.com_docker_compose_project_working_dir", "log.file.path" ]
+      ignore_missing: false
+
+monitoring.enabled: false
+logging.metrics.enabled: false
+logging.level: debug
+logging.selectors: ["*"]
+logging.to_files: true

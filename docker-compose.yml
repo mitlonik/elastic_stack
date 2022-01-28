@@ -1,0 +1,104 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: elasticsearch:${ELK_VERSION}
+    container_name: elasticsearch_${ELK_VERSION}
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"   # Elasticsearch HTTP
+      - "9300:9300"   # Elasticsearch TCP transport
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - elastic
+    labels:
+      co.elastic.logs/enabled: "false" # for Filebeat
+
+  kibana:
+    image: kibana:${ELK_VERSION}
+    container_name: kibana_${ELK_VERSION}
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic
+    labels:
+      co.elastic.logs/enabled: "false" # for Filebeat
+
+  logstash:
+    image: logstash:${ELK_VERSION}
+    container_name: logstash_${ELK_VERSION}
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    environment:
+      - STDOUT=true
+      - "LS_JAVA_OPTS=-Xms512m -Xmx512m"
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+      - kibana
+    ports:
+      - "5044:5044"       # Logstash Beats [filebeat] input
+      - "5000:5000/tcp"   # Logstash TCP input
+      - "5000:5000/udp"   # Logstash UDP input
+      - "9600:9600"       # Logstash monitoring API
+    networks:
+      - elastic
+    labels:
+      co.elastic.logs/enabled: "false" # for Filebeat
+
+  filebeat:
+    image: filebeat:${ELK_VERSION}
+    container_name: filebeat_${ELK_VERSION}
+    build:
+      context: filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    entrypoint: filebeat -e -strict.perms=false
+    user: root
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+    networks:
+      - elastic
+    labels:
+      co.elastic.logs/enabled: "false"
+
+networks:
+  elastic:
+    driver: bridge
+
+volumes:
+  elasticsearch:
+    driver: local
