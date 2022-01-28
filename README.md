@@ -12,6 +12,6 @@ Error invoking remote method 'docker-start-container': Error: (HTTP code 500) se
 ```
 resolve this problem - [Port 5000 is now used for Airplay as well as port 7000 in macOS Monterey](https://apple.stackexchange.com/questions/431154/controlcenter-app-listens-to-port-5000-tcp-on-monterey-os-is-that-normal-why-d)
 
-You can toggle that off by unchecking 'Ariplay Receiver' in System Preferences > Sharing at the bottom of the list.
+You can toggle that off by unchecking 'Airplay Receiver' in System Preferences > Sharing at the bottom of the list.
 
 So yes, it's normal ! Apple realized that those ports were not used from an OS point of view, even if a lot of developers use those ports by default.
