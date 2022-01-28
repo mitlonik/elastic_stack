@@ -65,8 +65,8 @@ services:
       - kibana
     ports:
       - "5044:5044"       # Logstash Beats [filebeat] input
-      - "5000:5000/tcp"   # Logstash TCP input
-      - "5000:5000/udp"   # Logstash UDP input
+      - "5001:5001/tcp"   # Logstash TCP input
+      - "5001:5001/udp"   # Logstash UDP input
       - "9600:9600"       # Logstash monitoring API
     networks:
       - elastic
