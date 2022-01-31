@@ -169,7 +169,7 @@ logging.to_files: true
 ##### for test purposes only, check how the host activity logs are logged. Аfter we make sure in kibana that the logs are being written, disable the module. 
 step by step :
 ``` bash
-sudo filebeat modules enable system
+sudo filebeat modules enable system elasticsearch logstash
  
 sudo filebeat modules list
 ```
