@@ -1,7 +1,3 @@
-filbeat.input
- path: /var/..
-
-
 filebeat.autodiscover:
   providers:
     - type: docker
