@@ -15,3 +15,18 @@ resolve this problem - change 5000 port to 5001 or see this - [Port 5000 is now 
 You can toggle that off by unchecking 'Airplay Receiver' in System Preferences > Sharing at the bottom of the list.
 
 So yes, it's normal ! Apple realized that those ports were not used from an OS point of view, even if a lot of developers use those ports by default.
+
+
+# useful links for logstash
+
+1. TOP ! [Практическое применение ELK. Настраиваем logstash и pipelines](https://habr.com/ru/post/451264/)
+
+2. TOP ! [Собираем, парсим и отдаём логи с помощью Logstash](https://habr.com/ru/post/165059/)
+
+3. [Советы и рекомендации по преобразованию неструктурированных данных из логов в ELK Stack используя GROK в LogStash](https://habr.com/ru/post/509632/)
+
+4. [A Practical Guide to Logstash: Parsing Common Log Patterns with Grok](https://coralogix.com/blog/a-practical-guide-to-logstash-parsing-common-log-patterns-with-grok/)
+
+5. [Подробное объяснение Logstash Grok](https://russianblogs.com/article/59001038982/)
+
+6. [Logstash parse json logs](https://stackoverflow.com/questions/49933195/logstash-grok-parse-a-line-with-json-filter)
