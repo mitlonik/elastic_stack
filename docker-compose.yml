@@ -1,5 +1,13 @@
 version: '3.7'
 
+networks:
+  elastic:
+    external: true
+
+volumes:
+  elasticsearch:
+    driver: local
+
 services:
   elasticsearch:
     image: elasticsearch:${ELK_VERSION}
@@ -76,57 +84,3 @@ services:
       - elastic
     labels:
       co.elastic.logs/enabled: "false" # for Filebeat
-
-  filebeat:
-    image: filebeat:${ELK_VERSION}
-    container_name: filebeat_${ELK_VERSION}
-    build:
-      context: filebeat/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    entrypoint: filebeat -e -strict.perms=false
-    user: root
-    volumes:
-      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - elasticsearch
-      - logstash
-      - kibana
-    networks:
-      - elastic
-    labels:
-      co.elastic.logs/enabled: "false"
-
-  # fluentd:
-  #   image: fluentd
-  #   container_name: fluentd
-  #   build:
-  #     context: fluentd/
-  #   volumes:
-  #     - ./fluentd/conf:/fluentd/etc
-  #     - /var/lib/docker/containers:/fluentd/log/containers
-  #   links:
-  #     - elasticsearch
-  #   depends_on:
-  #     - elasticsearch
-  #     - logstash
-  #     - kibana
-  #   ports:
-  #     - "8888:8888"
-  #     - "24224:24224"
-  #     - "24224:24224/udp"
-  #   networks:
-  #     - elastic
-  #   logging:
-  #     driver: "local"
-  #   restart: always
-
-networks:
-  elastic:
-    driver: bridge
-
-volumes:
-  elasticsearch:
-    driver: local

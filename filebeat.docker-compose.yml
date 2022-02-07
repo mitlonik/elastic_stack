@@ -1,0 +1,28 @@
+version: '3.7'
+
+networks:
+  elastic:
+    external: true
+
+services:
+  filebeat:
+    image: filebeat:${ELK_VERSION}
+    container_name: filebeat_${ELK_VERSION}
+    build:
+      context: filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    entrypoint: filebeat -e -strict.perms=false
+    user: root
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+    networks:
+      - elastic
+    labels:
+      co.elastic.logs/enabled: "false"

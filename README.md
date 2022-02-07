@@ -2,6 +2,10 @@
 
 Filebeat finds all running docker containers on the host and sends the stdout stream from the containers to logstash or elasticsearch (depending on needs).
 
+How run:
+``` bash
+docker-compose -f docker-compose.yml -f filebeat.docker-compose.yml up --build
+```
 
 
 ## For Mac OS X Users
