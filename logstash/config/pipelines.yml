@@ -4,4 +4,4 @@
   path.config: "/usr/share/logstash/pipeline/logstash.conf"
 
 # - pipeline.id: p2p_api
-#   path.config: "/usr/share/logstash/pipeline/p2p_api_pipeline.conf"
+#   path.config: "/usr/share/logstash/pipeline/p2p_api_pipeline.conf" # "../../*.conf"
