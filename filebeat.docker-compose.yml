@@ -3,6 +3,8 @@ version: '3.7'
 networks:
   elastic:
     external: true
+  only_fbeat:
+    external: true
 
 services:
   filebeat:
@@ -24,5 +26,6 @@ services:
       - kibana
     networks:
       - elastic
+      - only_fbeat
     labels:
       co.elastic.logs/enabled: "false"
