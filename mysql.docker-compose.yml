@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: books
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: changeme
+    volumes:
+      # Dump files for initiating tables
+      - ./databases/mysql/data/:/docker-entrypoint-initdb.d/
+    labels:
+      co.elastic.logs/enabled: "true" # for Filebeat
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10k"
+        max-file: "10"
