@@ -34,3 +34,5 @@ So yes, it's normal ! Apple realized that those ports were not used from an OS p
 5. [Подробное объяснение Logstash Grok](https://russianblogs.com/article/59001038982/)
 
 6. [Logstash parse json logs](https://stackoverflow.com/questions/49933195/logstash-grok-parse-a-line-with-json-filter)
+
+[elastalert 2](https://elastalert2.readthedocs.io/en/latest/elastalert.html#overview)
